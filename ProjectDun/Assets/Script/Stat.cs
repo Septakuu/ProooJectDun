@@ -5,22 +5,84 @@ using UnityEngine;
 public class Stat : MonoBehaviour
 {
     [System.Serializable]
-    public enum TYPE
+    public struct Status
     {
-        Melee,         // 근거리 공격
-        Range,        // 원거리 공격
-        Spell,          // 마법 공격
+        public int level;
+        public float hp;
+        public float power;
+        public float attackRate;
+        public float defence;
+        public float resistance;
+        public float moveSpeed;
+        public float attackRange;
     }
 
-    [SerializeField] TYPE type;
-    public int level;                    // 레벨
-    public int hp;                       // 체력
-    public int maxHp;                // 최대체력
-    public float attackPower;      // 공격력(물리공격력)
-    public float spellPower;         // 주문력(마법공격력)
-    public float critChance;         // 크리티컬 확률
-    public float critMulti;            // 크리티컬 배율
-    public float armor;              // 방어력
-    public float evasion;            // 회피율
-    public float eleResistance;    // 속성저항
+    [SerializeField] string nickname;      // 이름.
+    public Status basic;     // 기본 스테이터스.
+    public Status grow;      // 성장 스테이터스.
+
+    public string Name => nickname;
+    public float Level => basic.level;
+    public float hp { get;  set; }
+    public bool IsAlive => hp > 0f;
+
+    // 스테이터스.
+    public float maxHp
+    {
+        get
+        {
+            return basic.hp + (grow.hp * basic.level);
+        }
+    }
+    public float power
+    {
+        get
+        {
+            return basic.power + (grow.power * basic.level);
+        }
+    }
+    public float attackRate
+    {
+        get
+        {
+            return basic.attackRate + (grow.attackRate * basic.level);
+        }
+    }
+    public float defence
+    {
+        get
+        {
+            return basic.defence + (grow.defence * basic.level);
+        }
+    }
+    public float resistance
+    {
+        get
+        {
+            return basic.resistance + (grow.resistance * basic.level);
+        }
+    }
+    public float moveSpeed
+    {
+        get
+        {
+            return basic.moveSpeed + (grow.moveSpeed * basic.level);
+        }
+    }
+    public float attackRange
+    {
+        get
+        {
+            return basic.attackRange + (grow.attackRange * basic.level);
+        }
+    }
+
+
+    private void Start()
+    {
+        hp = maxHp;
+    }
+
+
+
 }
