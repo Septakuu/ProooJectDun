@@ -12,8 +12,43 @@ public class PlayerStat : Stat
     public int dex;
     public int wis;         // Áö´É int
 
-
-	private void Update()
+    public Status grow;
+    public float maxHp
+    {
+        get
+        {
+            return basic.hp + (grow.hp * basic.level);
+        }
+    }
+    public float attackPower
+    {
+        get
+        {
+            return basic.attackPower + (grow.attackPower * basic.level);
+        }
+    }
+    public float attackRate
+    {
+        get
+        {
+            return basic.attackRate + (grow.attackRate * basic.level);
+        }
+    }
+    public float moveSpeed
+    {
+        get
+        {
+            return basic.moveSpeed + (grow.moveSpeed * basic.level);
+        }
+    }
+    public float attackRange
+    {
+        get
+        {
+            return basic.attackRange + (grow.attackRange * basic.level);
+        }
+    }
+    private void Update()
 	{
         if (exp >= maxExp)
 		{

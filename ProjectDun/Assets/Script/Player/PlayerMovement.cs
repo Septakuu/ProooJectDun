@@ -8,6 +8,8 @@ using UnityEngine.AI;
 using UnityEditor;
 #endif
 
+[RequireComponent(typeof(Damagable))]
+[RequireComponent(typeof(AttackAble))]
 [RequireComponent(typeof(Stat))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
@@ -28,23 +30,27 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rigid;
     Animator anim;
 
+
+    AttackAble attackable;
     RaycastHit hit;                      // 마우스 동작으로 리턴된 정보가 저장 될 변수
     Damagable target;               // 공격 시 대상.
     Stat stat;
+    int playerLayerMask;
     float playerY => transform.position.y;
     Coroutine attackCoroutine;
-
     [SerializeField] STATE state;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] float attackRange;
     private void Start()
     {
+        playerLayerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
         state = STATE.Idle;
         cam = Camera.main;
         rigid = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         stat = GetComponent<PlayerStat>();
         anim = GetComponentInChildren<Animator>();
+        attackable = GetComponent<AttackAble>();
     }
     private void Update()
     {
@@ -73,10 +79,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             Ray point = cam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(point, out hit, float.MaxValue))
+            
+            if (Physics.Raycast(point, out hit, float.MaxValue, playerLayerMask))
             {
                 target = hit.collider.GetComponent<Damagable>();
-                if (hit.collider.gameObject.tag == "Ground")
+                if (hit.collider.gameObject.CompareTag("Ground"))
                     state = STATE.Move;
 
                 if(target != null)              // target 이  null이 아니고,
@@ -99,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
         agent.SetDestination(target.transform.position);
         float distance = Vector3.Distance(transform.position, target.transform.position);
         bool attackable = distance < attackRange;
+        anim.SetBool("isMove", true);
         if (attackable)
             state = STATE.Attack;
     }
@@ -114,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
     private void Attack()
 	{
         agent.SetDestination(transform.position);
-
+        
         if (attackCoroutine != null)
             return;
 
@@ -122,11 +130,12 @@ public class PlayerMovement : MonoBehaviour
     }
     IEnumerator AttackCycle()
 	{
-        WaitForSeconds wait = new WaitForSeconds(stat.attackRate);
+        WaitForSeconds wait = new WaitForSeconds(stat.basic.attackRate);
 		while (state == STATE.Attack)
 		{
             anim.SetBool("isMove", false);
             anim.SetBool("isAttack",true);
+            attackable.Attack(target);
             yield return wait;
 		}
         StopCoroutine(attackCoroutine);
