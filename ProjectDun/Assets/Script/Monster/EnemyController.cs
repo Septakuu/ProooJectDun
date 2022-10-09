@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] Monster enemyInfo;
     [SerializeField] Stat enemyStat;
-
+    [SerializeField] ParticleSystem deadFx;
     [System.Serializable]
     private enum STATE
     {
@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
         Patrol,     // 정찰 : 주변을 돌아다닌다.
         Chase,      // 추적 : 대상이 공격범위에 들어갈때까지 따라간다.
         Attack,     // 공격 : 대상을 공격한다.
+        Dead,
     }
 
    [SerializeField] Damagable target;      // 플레이어(=타겟)
@@ -33,8 +34,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float detectionRange;  // 탐지 범위.
     [SerializeField] float attackRange;     // 공격 범위.
 
+    protected Stat status;
+
     private NavMeshAgent agent;
-    private Stat status;
     private AttackAble attackable;
     private Animator anim;
 
@@ -51,6 +53,8 @@ public class EnemyController : MonoBehaviour
     private bool isSetPatrolPoint;  // 정찰 지점이 준비가 되었는가?
     private bool isInDetectRange;   // 탐지 범위에 플레이어가 들어왔는가?
     private bool isInAttackRange;   // 공격 범위에 플레이어가 들어왔는가?
+
+    public bool isDead => status.basic.hp <= 0;
 
     void Start()
     {
@@ -94,10 +98,13 @@ public class EnemyController : MonoBehaviour
 	private void Update()
 	{
         CheckTarget();
-		}
+        }
 	void LateUpdate()
     {
-
+		if (isDead)
+		{
+            state = STATE.Dead;
+		}
 		// 탐지, 공격 범위에 플레이어가 들어왔는지 체크.
 		switch (state)
 		{
@@ -112,6 +119,9 @@ public class EnemyController : MonoBehaviour
 				break;
 			case STATE.Attack:
                 OnAttack();
+                break;
+            case STATE.Dead:
+                OnDead();
 				break;
 		}
 
@@ -141,6 +151,12 @@ public class EnemyController : MonoBehaviour
 
 		anim.SetBool("isMove", state == STATE.Patrol || state == STATE.Chase);
     }
+    void OnDead()
+	{
+        ParticleSystem newFx = Instantiate(deadFx,transform.position,transform.rotation);
+        newFx.Play();
+		Destroy(gameObject);
+	}
 
     private void OnStay()
     {

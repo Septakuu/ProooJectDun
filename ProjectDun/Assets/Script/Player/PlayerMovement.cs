@@ -149,7 +149,10 @@ public class PlayerMovement : MonoBehaviour
         Handles.color = Color.green;
         GUIStyle style = new GUIStyle() { fontSize = 30 };
         Handles.Label(transform.position, state.ToString());
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+	
 #endif
 }
 

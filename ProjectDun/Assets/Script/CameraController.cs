@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour
     public float ymove;  // Y축 누적 이동량
     public float distance = 3;
     public float zoomSpeed=2;
+    [SerializeField] float maxZoom;
 
     Camera cam;
 	private void Start()
@@ -37,7 +38,7 @@ public class CameraController : MonoBehaviour
     void Zoom()
 	{
         float scroll = Input.GetAxis("Mouse ScrollWheel")* zoomSpeed;
-        distance = Mathf.Clamp(distance -scroll , 3, 10);
+        distance = Mathf.Clamp(distance -scroll , 3, maxZoom);
     }
 
 }
