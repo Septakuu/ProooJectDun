@@ -19,5 +19,5 @@ MonoBehaviour:
   maxHp: 100
   attackPower: 10
   attackRate: 1
-  givenExp: 10
+  givenExp: 150
   dropItem: []

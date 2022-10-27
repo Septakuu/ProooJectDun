@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093cee75adc169043ae09a1946c682ce, type: 3}
+  m_Name: E004
+  m_EditorClassIdentifier: 
+  itemCode: E004
+  itemSprite: {fileID: 21300000, guid: b8fb302c5768e334ca82005f50e58121, type: 3}
+  itemName: "\uAC00\uC8FD \uBC14\uC9C0"
+  description: "\uAC00\uC8FD\uC73C\uB85C \uB9CC\uB4E0 \uBC14\uC9C0\uB2E4."
+  sellPrice: 5
+  parts: 3
+  stat1: 1
+  stat2: 10
+  limitLevel: 1

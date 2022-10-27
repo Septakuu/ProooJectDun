@@ -21,6 +21,7 @@ public class RewardRoom : MonoBehaviour
 	}
 	private void OnTriggerEnter(Collider other)
 	{
+		Debug.Log(other.name);
 		StartCoroutine(GameClear());
 	}
 	IEnumerator GameClear()

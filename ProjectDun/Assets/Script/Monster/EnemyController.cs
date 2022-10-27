@@ -155,6 +155,7 @@ public class EnemyController : MonoBehaviour
 	{
         ParticleSystem newFx = Instantiate(deadFx,transform.position,transform.rotation);
         newFx.Play();
+        PlayerStat.Instance.TakeEXP(enemyInfo.givenExp);
 		Destroy(gameObject);
 	}
 
@@ -207,16 +208,17 @@ public class EnemyController : MonoBehaviour
             return;
 		}
         agent.SetDestination(target.transform.position);
+        attackable.Targetting(target);
     }
     private void OnAttack()
     {
         agent.SetDestination(transform.position);
-
+        transform.LookAt(target.transform);
         if (nextAttackTime <= Time.time)
         {
             nextAttackTime = Time.time + status.basic.attackRate;
             anim.SetTrigger("onAttack");
-            attackable.Attack(target);
+            BottomUI.Instance.UpdateBottomUi();
         }
     }
 

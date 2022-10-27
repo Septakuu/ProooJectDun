@@ -100,14 +100,18 @@ public class PlayerMovement : MonoBehaviour
     private void Idle()
 	{
         anim.SetBool("isMove", false);
-	}
+        TargetUI.Instance.UpdateTargetUI(target);
+
+    }
     private void Chase()
 	{
+        TargetUI.Instance.UpdateTargetUI(target);
+        attackable.Targetting(target);
         agent.SetDestination(target.transform.position);
         float distance = Vector3.Distance(transform.position, target.transform.position);
-        bool attackable = distance < attackRange;
+        bool canAttack = distance < attackRange;
         anim.SetBool("isMove", true);
-        if (attackable)
+        if (canAttack)
             state = STATE.Attack;
     }
     private void Move()
@@ -118,11 +122,20 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isMove", true);
         if (agent.hasPath && agent.remainingDistance <= 0.1f)
             state = STATE.Idle;
+        TargetUI.Instance.UpdateTargetUI(target);
+
     }
     private void Attack()
 	{
+        if (target == null)
+		{
+            anim.SetBool("isAttack", false);
+            state = STATE.Idle;
+            return;
+		}
+
         agent.SetDestination(transform.position);
-        
+        transform.LookAt(target.transform);
         if (attackCoroutine != null)
             return;
 
@@ -135,12 +148,15 @@ public class PlayerMovement : MonoBehaviour
 		{
             anim.SetBool("isMove", false);
             anim.SetBool("isAttack",true);
-            attackable.Attack(target);
+            
+            TargetUI.Instance.UpdateTargetUI(target);
             yield return wait;
 		}
         StopCoroutine(attackCoroutine);
-        attackCoroutine = null;
         anim.SetBool("isAttack", false);
+
+        attackCoroutine = null;
+        target = null;
     }
 
 #if UNITY_EDITOR
