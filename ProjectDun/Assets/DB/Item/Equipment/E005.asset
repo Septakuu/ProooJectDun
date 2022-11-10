@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 093cee75adc169043ae09a1946c682ce, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b14e8fb9c8c0d1438168eeeb662aadc, type: 3}
   m_Name: E005
   m_EditorClassIdentifier: 
   itemCode: E005
   itemSprite: {fileID: 21300000, guid: e420c5bc93cb2604695a893500c897e3, type: 3}
-  itemName: "\uAC00\uC8FD \uBD80\uCE20"
-  description: "\uAC00\uC8FD\uC73C\uB85C \uB9CC\uB4E0 \uC2E0\uBC1C\uC774\uB2E4."
+  itemName: "\uC2E0\uBC1C"
+  description: "\uC2E0\uBC1C\uC774\uB2E4."
   sellPrice: 5
+  limitLevel: 1
   parts: 4
   stat1: 1
   stat2: 10
-  limitLevel: 1

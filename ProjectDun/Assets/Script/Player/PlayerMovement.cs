@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
         Attack,
         Dead,
     }
-
     NavMeshAgent agent;
     Vector3 movePoint;
 
@@ -34,7 +33,8 @@ public class PlayerMovement : MonoBehaviour
     AttackAble attackable;
     RaycastHit hit;                      // 마우스 동작으로 리턴된 정보가 저장 될 변수
     Damagable target;               // 공격 시 대상.
-    Stat stat;
+    PlayerStat stat;
+
     int playerLayerMask;
     float playerY => transform.position.y;
     Coroutine attackCoroutine;
@@ -97,12 +97,13 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
     private void Idle()
 	{
         anim.SetBool("isMove", false);
         TargetUI.Instance.UpdateTargetUI(target);
-
     }
+
     private void Chase()
 	{
         TargetUI.Instance.UpdateTargetUI(target);
@@ -114,6 +115,7 @@ public class PlayerMovement : MonoBehaviour
         if (canAttack)
             state = STATE.Attack;
     }
+
     private void Move()
     {
         movePoint = hit.point;
@@ -125,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
         TargetUI.Instance.UpdateTargetUI(target);
 
     }
+
     private void Attack()
 	{
         if (target == null)
@@ -141,6 +144,7 @@ public class PlayerMovement : MonoBehaviour
 
         attackCoroutine = StartCoroutine(AttackCycle());
     }
+
     IEnumerator AttackCycle()
 	{
         WaitForSeconds wait = new WaitForSeconds(stat.basic.attackRate);

@@ -17,6 +17,7 @@ MonoBehaviour:
   itemName: "MP \uD68C\uBCF5\uC57D"
   description: "MP\uB97C 100 \uD68C\uBCF5\uC2DC\uD0A8\uB2E4."
   sellPrice: 20
+  limitLevel: 1
   effect: 1
   effection: 100
   count: 99

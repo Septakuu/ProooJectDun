@@ -46,20 +46,18 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPoin
 
 	public void SetUp(Item targetItem)
 	{
-		if(targetItem is EquipItem)
+		if(targetItem is Equipment)
 		{
-			EquipItem item = targetItem as EquipItem;
+			Equipment item = targetItem as Equipment;
 			itemDescription.itemName.text = item.itemName;
 			itemDescription.itemImage.sprite = item.itemSprite;
 
 			itemDescription.limitLevel.text = string.Format($"장착 레벨 : {item.limitLevel}");
 			itemDescription.limitLevel.gameObject.SetActive(true);
 
-			itemDescription.itemStat1.text =
-				string.Format(item.parts == EquipItem.PARTS.Weapon ? $"공격력 : {item.stat1}" : $"방어력 : {item.stat1}");
+			itemDescription.itemStat1.text =string.Format($"방어력 : {item.defense}");
 
-			itemDescription.itemStat2.text=
-				string.Format(item.parts == EquipItem.PARTS.Weapon ? $"공격속도 : {item.stat2}" : $"체력 : {item.stat2}");
+			itemDescription.itemStat2.text= string.Format($"체력 : {item.hp}");
 			itemDescription.itemStat2.gameObject.SetActive(true);
 
 			itemDescription.itemDescription.text = slotItem.description;
@@ -81,6 +79,23 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPoin
 			itemDescription.itemDescription.text = item.description;
 
 			itemDescription.SwitchPanel(true);
+		}
+		else if(targetItem is Weapon)
+		{
+			Weapon item = targetItem as Weapon;
+			itemDescription.itemName.text = item.itemName;
+			itemDescription.itemImage.sprite = item.itemSprite;
+
+			itemDescription.limitLevel.text = string.Format($"장착 레벨 : {item.limitLevel}");
+			itemDescription.limitLevel.gameObject.SetActive(true);
+
+			itemDescription.itemStat1.text = string.Format($"공격력 : {item.power}");
+			itemDescription.itemStat2.text = string.Format($"공격속도 : {item.rate}");
+			itemDescription.itemStat2.gameObject.SetActive(true);
+
+			itemDescription.itemDescription.text = slotItem.description;
+			itemDescription.SwitchPanel(true);
+
 		}
 	}
 }

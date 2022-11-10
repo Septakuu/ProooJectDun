@@ -5,11 +5,11 @@ using UnityEngine.EventSystems;
 
 public class EquipSlot : Slot
 {
-	public EquipItem.PARTS parts;
+	public Equipment.PARTS parts;
 	public PlayerStat stat;
 
 	// 장착
-	public void Equip(EquipItem equip)
+	public void Equip(Equipment equip)
 	{
 		slotItem = equip;
 		SetUp(slotItem);
@@ -17,39 +17,21 @@ public class EquipSlot : Slot
 	}
 
 	// equip slot, PlayerStat에 정보 전달.
-	void EquipSetUp(EquipItem equip)
+	void EquipSetUp(Equipment equip)
 	{
-		slotImage.sprite = equip.itemSprite;	// 장비 스프라이트 전달
-
-		if(equip.parts == EquipItem.PARTS.Weapon)	// 타입이 웨폰이면 공격력, 공격속도
-		{
-			stat.AttackPower += equip.stat1;
-			stat.AttackRate += equip.stat2;
-		}
-		else																// 나머지는 방어력과 최대 체력에 전달
-		{
-			stat.Defense += equip.stat1;
-			stat.MaxHp += equip.stat2;
-		}
-			BottomUI.Instance.UpdateBottomUi();			// 체력 등 변경 값 하단 UI에 전달
+		slotImage.sprite = equip.itemSprite;    // 장비 스프라이트 전달
+		stat.Defense += equip.defense;
+		stat.MaxHp += equip.hp;
+		BottomUI.Instance.UpdateBottomUi();         // 체력 등 변경 값 하단 UI에 전달
 	}
 	// 장착 해제
-	void EquipClear(EquipItem equip)
+	void EquipClear(Equipment equip)
 	{
 		slotImage.sprite = null;
 		slotItem = null;
-
-		if (equip.parts == EquipItem.PARTS.Weapon)	// 웨폰이면 공격력에 - 전달
-		{
-			stat.AttackPower -= equip.stat1;
-			stat.AttackRate -= equip.stat2;
-		}
-		else																// 나머지는 방어력 과 최대체력에 전달
-		{
-			stat.Defense -= equip.stat1;
-			stat.MaxHp -= equip.stat2;
-		}
-			BottomUI.Instance.UpdateBottomUi();		// 변경 값 하단 UI에 전달
+		stat.Defense -= equip.defense;
+		stat.MaxHp -= equip.hp;
+		BottomUI.Instance.UpdateBottomUi();     // 변경 값 하단 UI에 전달
 	}
 
 	public override void OnPointerClick(PointerEventData eventData)
@@ -62,7 +44,7 @@ public class EquipSlot : Slot
 			if(this is EquipSlot)
 			{
 				inventory.Add(slotItem);
-				EquipClear(slotItem as EquipItem);
+				EquipClear(slotItem as Equipment);
 				EquipManager.Instance.SwitchEquip();
 			}
 		}

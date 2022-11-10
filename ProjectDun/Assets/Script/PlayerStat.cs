@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlayerStat : Stat
 {
+    public enum WEAPON
+	{
+        Unarmed,
+        OneHand,
+        TwoHand,
+        Bow,
+	}
+    [SerializeField] Animator anim;
     public static PlayerStat Instance { get; private set; }
     [SerializeField] ParticleSystem levelUpFx;
     public float exp;
@@ -16,7 +24,7 @@ public class PlayerStat : Stat
         Instance = this;
 	}
 	public Status grow;
-
+    public WEAPON weapon;
     // 오류 수정,  프로퍼티 내부 set 값을 프로퍼티 명으로 설정 할 경우 스택 오버플로우 발생 
     public float MaxHp
     {
@@ -84,6 +92,7 @@ public class PlayerStat : Stat
 		set
 		{
             basic.attackRate= value;
+            anim.SetFloat("attackSpeed", basic.attackRate);
         }
     }
     public float MoveSpeed
@@ -121,6 +130,7 @@ public class PlayerStat : Stat
 	}
 	private void Start()
 	{
+        anim.SetFloat("attackSpeed", basic.attackRate);
         basic.hp = basic.maxHP;
         basic.mp = basic.maxMP;
 

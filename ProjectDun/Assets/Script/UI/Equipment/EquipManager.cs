@@ -38,7 +38,7 @@ public class EquipManager : MonoBehaviour
 			panel.SetActive(!panel.activeSelf);
 		}
 	}
-	public void EquipSetUp(EquipItem equipment, int slotNum)
+	public void EquipSetUp(Equipment equipment, int slotNum)
 	{
 		for (int i = 0; i < equips.Length; i++)
 		{
@@ -56,6 +56,7 @@ public class EquipManager : MonoBehaviour
 		}
 		SwitchEquip();
 	}
+
 	public void SwitchEquip()
 	{
 		for(int i =0; i < equips.Length; i++)
@@ -65,11 +66,11 @@ public class EquipManager : MonoBehaviour
 		}
 	}
 
-	public EquipItem Swap(EquipItem equipment, EquipSlot e)
+	public Equipment Swap(Equipment equipment, EquipSlot e)
 	{
-		EquipItem temp = null;
+		Equipment temp = null;
 
-		temp = (EquipItem)e.slotItem;
+		temp = (Equipment)e.slotItem;
 		e.Equip(equipment);
 
 		return temp;

@@ -17,6 +17,7 @@ MonoBehaviour:
   itemName: "HP \uD68C\uBCF5\uC57D"
   description: "HP\uB97C 100 \uD68C\uBCF5\uC2DC\uD0A8\uB2E4."
   sellPrice: 10
+  limitLevel: 1
   effect: 0
   effection: 100
   count: 95

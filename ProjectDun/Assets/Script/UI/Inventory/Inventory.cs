@@ -8,6 +8,7 @@ public class Inventory : MonoBehaviour
 
 	[SerializeField] ItemUsingManager usingManager;
 	[SerializeField] EquipManager equipManager;
+	[SerializeField] WeaponManager weaponManager;
 
 	public GameObject panel;
 	public List<Item> inven = new List<Item>();
@@ -71,9 +72,9 @@ public class Inventory : MonoBehaviour
 
 	public void Use(int slotNum)
 	{
-		if (inven[slotNum] is EquipItem)
+		if (inven[slotNum] is Equipment)
 		{
-			EquipItem item = inven[slotNum] as EquipItem;
+			Equipment item = inven[slotNum] as Equipment;
 			equipManager.EquipSetUp(item, slotNum);
 			itemDescription.SwitchPanel(false);
 		}
@@ -87,6 +88,12 @@ public class Inventory : MonoBehaviour
 				inven.Remove(item);
 				itemDescription.SwitchPanel(false);
 			}
+		}
+		else if(inven[slotNum] is Weapon)
+		{
+			Weapon item = inven[slotNum] as Weapon;
+			weaponManager.WeaponSetup(item,slotNum);
+			itemDescription.SwitchPanel(false);
 		}
 		OnUpdateInven();
 	}
