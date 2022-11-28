@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 
 #if UNITY_EDITOR
@@ -78,21 +79,24 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
-            Ray point = cam.ScreenPointToRay(Input.mousePosition);
-            
-            if (Physics.Raycast(point, out hit, float.MaxValue, playerLayerMask))
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                target = hit.collider.GetComponent<Damagable>();
-                if (hit.collider.gameObject.CompareTag("Ground"))
-                    state = STATE.Move;
+                Ray point = cam.ScreenPointToRay(Input.mousePosition);
 
-                if(target != null)              // target 이  null이 아니고,
-				{
-                    state = STATE.Chase;
-                    // attackRange안의 적의 collider[]을 받아와서,
-                    // target의 instanceid와 대조시켜 올바른 대상을 공격
-                    // 또는 target과 나 사이의 distance가 attackrange보다 작거나 같다면!
+                if (Physics.Raycast(point, out hit, float.MaxValue, playerLayerMask))
+                {
+                    target = hit.collider.GetComponent<Damagable>();
+                    if (hit.collider.gameObject.CompareTag("Ground"))
+                        state = STATE.Move;
+                    
+                    if (target != null)              // target 이  null이 아니고,
+                    {
+                        state = STATE.Chase;
+                        // attackRange안의 적의 collider[]을 받아와서,
+                        // target의 instanceid와 대조시켜 올바른 대상을 공격
+                        // 또는 target과 나 사이의 distance가 attackrange보다 작거나 같다면!
 
+                    }
                 }
             }
         }
@@ -106,6 +110,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Chase()
 	{
+        if (target == null)
+            return;
+
         TargetUI.Instance.UpdateTargetUI(target);
         attackable.Targetting(target);
         agent.SetDestination(target.transform.position);

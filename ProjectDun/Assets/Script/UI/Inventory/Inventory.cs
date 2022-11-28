@@ -15,6 +15,7 @@ public class Inventory : MonoBehaviour
 	public Slot[] slots;
 	public ItemWindow itemDescription;
 	public ItemWindow compareItemWindow;
+	public int gold;
 	private void Start()
 	{
 		panel.gameObject.SetActive(false);

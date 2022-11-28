@@ -13,7 +13,7 @@ using UnityEditor;
 [RequireComponent(typeof(Stat))]
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] Monster enemyInfo;
+    public Monster enemyInfo;
     [SerializeField] Stat enemyStat;
     [SerializeField] ParticleSystem deadFx;
     [System.Serializable]
@@ -156,6 +156,7 @@ public class EnemyController : MonoBehaviour
         ParticleSystem newFx = Instantiate(deadFx,transform.position,transform.rotation);
         newFx.Play();
         PlayerStat.Instance.TakeEXP(enemyInfo.givenExp);
+        ItemManager.Instance.DropItem(this);
 		Destroy(gameObject);
 	}
 

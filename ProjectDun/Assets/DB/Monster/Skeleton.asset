@@ -20,4 +20,9 @@ MonoBehaviour:
   attackPower: 10
   attackRate: 1
   givenExp: 150
-  dropItem: []
+  dropItem:
+  - {fileID: 11400000, guid: 7f7f71d9fb172904f91a873419b1415a, type: 2}
+  - {fileID: 11400000, guid: 311faa927baf3fb46a4ed4a9e851d328, type: 2}
+  - {fileID: 11400000, guid: 24869518590692b4c898b130eda375e5, type: 2}
+  - {fileID: 11400000, guid: 7f777a1a9c631b34ea133d99a051a839, type: 2}
+  - {fileID: 11400000, guid: 526f2d3f672ae6f49903e256f31eb2d5, type: 2}

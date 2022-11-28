@@ -13,5 +13,5 @@ public class Monster : ScriptableObject
 	public float attackPower;             // 몬스터 공격력
 	public float attackRate;               // 몬스터 공격 속도
 	public float givenExp;                 // 몬슨터 경험치
-	public GameObject[] dropItem;	// 드랍 아이템
+	public Item[] dropItem;	// 드랍 아이템
 }

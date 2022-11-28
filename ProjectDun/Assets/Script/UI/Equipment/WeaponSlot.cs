@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
 
 
 public class WeaponSlot : Slot
@@ -12,14 +14,16 @@ public class WeaponSlot : Slot
 		Sub,
 	}
 
+	public Image selectImage;
 	public MAINSUB mainSub;
 	public PlayerStat stat;
-
+	public WeaponManager weaponManager;
 	public bool isAvailable;
 
 	private void Start()
 	{
 		isAvailable = slotItem == null;
+		selectImage.enabled = false;
 	}
 	// ÀåÂø
 	public void Equip(Weapon equip)
@@ -57,7 +61,22 @@ public class WeaponSlot : Slot
 			{
 				inventory.Add(slotItem);
 				EquipClear(slotItem as Weapon);
+				WeaponManager.Instance.WeaponSlotInfoSend();
+				WeaponManager.Instance.AnimStateChange();
 				EquipManager.Instance.SwitchEquip();
+			}
+		}
+		if (eventData.button == PointerEventData.InputButton.Left && selectImage.enabled == true)
+		{
+			if (slotItem == null)
+				return;
+			if(this is WeaponSlot)
+			{
+				inventory.inven[weaponManager.invenSlotNum] = weaponManager.Swap(weaponManager.invenWeapon, this);
+				weaponManager.SelectImageOff();
+				WeaponManager.Instance.WeaponSlotInfoSend();
+				WeaponManager.Instance.AnimStateChange();
+				inventory.OnUpdateInven();
 			}
 		}
 	}
