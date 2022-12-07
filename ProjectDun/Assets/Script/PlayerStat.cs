@@ -156,8 +156,9 @@ public class PlayerStat : Stat
 
         // 레벨업 이펙트 재생
         lvUp.Play();
-        // 레벨을 1 올린다.
-        basic.level += 1;
+        EffectSoundManager.Instance.PlayLevelUp();
+		// 레벨을 1 올린다.
+		basic.level += 1;
         exp = 0;
         maxExp = (basic.level + 2) * basic.level * 100;
 

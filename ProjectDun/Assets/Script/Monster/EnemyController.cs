@@ -155,6 +155,7 @@ public class EnemyController : MonoBehaviour
 	{
         ParticleSystem newFx = Instantiate(deadFx,transform.position,transform.rotation);
         newFx.Play();
+        EffectSoundManager.Instance.SkeletonDeath();
         PlayerStat.Instance.TakeEXP(enemyInfo.givenExp);
         ItemManager.Instance.DropItem(this);
 		Destroy(gameObject);

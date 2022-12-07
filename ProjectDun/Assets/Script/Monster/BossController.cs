@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class BossController : EnemyController
 {
-
 	private void OnDestroy()
 	{
 		BossSpawnSystem.Instance.ClearDungeon();
 	}
-	
 }

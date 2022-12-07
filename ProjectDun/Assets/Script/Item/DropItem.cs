@@ -5,14 +5,26 @@ using UnityEngine;
 public class DropItem : MonoBehaviour
 {
     public Item itemInfo;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool isNearPlayer;
+	public PlayerMovement player;
 
-    public void SetUp(Item item)
+	private void Update()
+	{
+		if (player != null)
+		{
+			if (Vector3.Distance(transform.position, player.transform.position) <= 15f)
+			{
+				isNearPlayer = true;
+			}
+			else
+			{
+				isNearPlayer = false;
+			}
+		}
+	}
+	public void SetUp(Item item)
 	{
         itemInfo = item;
-	}
+        DropUIManager.Instance.SetUp(this);
+    }
 }

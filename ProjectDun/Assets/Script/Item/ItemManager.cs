@@ -5,7 +5,9 @@ using UnityEngine;
 public class ItemManager : MonoBehaviour
 {
 	public static ItemManager Instance { get; private set; }
+	[SerializeField] DropUIManager dropUIManager;
 	// 플레이어 인포 값을.. inven?
+	[SerializeField] PlayerMovement player;
 	[SerializeField] Inventory inven;
 	[SerializeField] Item[] dropItems;
 	[SerializeField] DropItem dropitem;
@@ -34,7 +36,9 @@ public class ItemManager : MonoBehaviour
 			Vector3 enemyPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y+3f, enemy.transform.position.z);
 
 			DropItem newDropItem = Instantiate(dropitem, enemyPos, enemy.transform.rotation);
+			newDropItem.player = player;
 			newDropItem.SetUp(DecideItem(dropItems));
+			
 		}
 	}
 	public Item DecideItem(Item[] items)

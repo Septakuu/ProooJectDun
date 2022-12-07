@@ -19,5 +19,5 @@ MonoBehaviour:
   sellPrice: 5
   limitLevel: 1
   parts: 2
-  stat1: 1
-  stat2: 10
+  defense: 1
+  hp: 10

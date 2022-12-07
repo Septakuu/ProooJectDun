@@ -99,6 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 0}
+  playerCheck: {fileID: 0}
+  isNearPlayer: 0
 --- !u!64 &2607535126333674256
 MeshCollider:
   m_ObjectHideFlags: 0

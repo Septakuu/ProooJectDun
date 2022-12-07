@@ -9,6 +9,12 @@ ModelImporter:
   - first:
       74: 2564530799510993286
     second: MeleeAttack_TwoHanded
+  - first:
+      74: 2564530799510993286
+    second: hum_male_meleeattack_2H_Weapon_01
+  - first:
+      74: 6763959035943531262
+    second: MeleeAttack_TwoHanded
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -92,7 +98,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.41768292
+      - time: 0.40354863
         functionName: Attack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 1df3b13cd4116a441bf1e09ca8fc5358, type: 3}

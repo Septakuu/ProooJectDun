@@ -143,7 +143,6 @@ public class PlayerMovement : MonoBehaviour
             state = STATE.Idle;
             return;
 		}
-
         agent.SetDestination(transform.position);
         transform.LookAt(target.transform);
         if (attackCoroutine != null)

@@ -20,7 +20,7 @@ public class AttackAble : MonoBehaviour
 	{
 		if (target == null)
 			return;
-		
+        EffectSoundManager.Instance.SwingWeapon();
 		Debug.Log($"{name} : {this.target.name}À» °ø°Ý!");
 		target.Damaged(stat);
 	}

@@ -28,6 +28,7 @@ public class Orbuculum : MonoBehaviour
 		if (isAnswer)
 		{
 			doorManager.OnSwitchDoor(isAnswer);
+			EffectSoundManager.Instance.CorrectInteract();
 			isUse = true;
 			orbManager.isClear = true;
 		}

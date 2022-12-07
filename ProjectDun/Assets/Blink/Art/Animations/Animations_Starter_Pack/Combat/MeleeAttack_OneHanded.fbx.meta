@@ -9,6 +9,12 @@ ModelImporter:
   - first:
       74: -8731992131643994696
     second: MeleeAttack_OneHanded
+  - first:
+      74: -8731992131643994696
+    second: hum_male_meleeattack_1H_Weapon_01
+  - first:
+      74: -3619599080133192075
+    second: MeleeAttack_OneHanded
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -39,11 +45,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: tpose
-      takeName: tpose
+      name: hum_male_meleeattack_1H_Weapon_01
+      takeName: hum_male_meleeattack_1H_Weapon_01
       internalID: 0
-      firstFrame: 0
-      lastFrame: 1
+      firstFrame: 2
+      lastFrame: 54
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -92,7 +98,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.40092164
+      - time: 0.38678738
         functionName: Attack
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 1df3b13cd4116a441bf1e09ca8fc5358, type: 3}
