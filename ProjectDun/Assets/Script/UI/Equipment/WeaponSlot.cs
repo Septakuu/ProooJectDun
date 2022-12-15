@@ -25,7 +25,7 @@ public class WeaponSlot : Slot
 		isAvailable = slotItem == null;
 		selectImage.enabled = false;
 	}
-	// ÀåÂø
+	// ï¿½ï¿½ï¿½ï¿½
 	public void Equip(Weapon equip)
 	{
 		slotItem = equip;
@@ -33,26 +33,30 @@ public class WeaponSlot : Slot
 		EquipSetUp(equip);
 	}
 
-	// equip slot, PlayerStat¿¡ Á¤º¸ Àü´Þ.
+	// equip slot, PlayerStatï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	void EquipSetUp(Weapon equip)
 	{
-		slotImage.sprite = equip.itemSprite;			// Àåºñ ½ºÇÁ¶óÀÌÆ® Àü´Þ
-		stat.AttackPower += equip.power;				// °ø°Ý·Â Àü´Þ.
-		stat.AttackRate += equip.rate;					// °ø°Ý ¼Óµµ Àü´Þ
+		slotImage.sprite = equip.itemSprite;			// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+		stat.AttackPower += equip.power;				// ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½.
+		stat.AttackRate += equip.rate;					// ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
 	}
-	// ÀåÂø ÇØÁ¦
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	public void EquipClear(Weapon equip)
 	{
 		slotImage.sprite = null;
 		slotItem = null;
 		stat.AttackPower -= equip.power;
 		stat.AttackRate -= equip.rate;
+		
+		if(equip.hand==Weapon.HAND.TwoHand){
+			WeaponManager.Instance.TwoHandClear();
+		}
 	}
 
-	// ½½·Ô ¸¶¿ì½º ¿ìÅ¬¸¯ ÀÌº¥Æ®(ÀåÂøÇØÁ¦)
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½Å¬ï¿½ï¿½ ï¿½Ìºï¿½Æ®(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 	public override void OnPointerClick(PointerEventData eventData)
 	{
-		// UI¿¡ Àû¿ëµÇ´Â OnPointerClick Àº PointerEventData¿¡ ¹öÆ° ÀÔ·ÂÁ¤º¸ Àü´Þ, Input.GetMouse ¾Æ´Ô
+		// UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ OnPointerClick ï¿½ï¿½ PointerEventDataï¿½ï¿½ ï¿½ï¿½Æ° ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, Input.GetMouse ï¿½Æ´ï¿½
 		if (eventData.button == PointerEventData.InputButton.Right)
 		{
 			if (slotItem == null)
@@ -61,9 +65,12 @@ public class WeaponSlot : Slot
 			{
 				inventory.Add(slotItem);
 				EquipClear(slotItem as Weapon);
-				WeaponManager.Instance.WeaponSlotInfoSend();
+				weaponManager.WeaponSlotInfoClear(this);
 				WeaponManager.Instance.AnimStateChange();
+				WeaponManager.Instance.SwitchEquip();
 				EquipManager.Instance.SwitchEquip();
+				inventory.OnUpdateInven();
+
 			}
 		}
 		if (eventData.button == PointerEventData.InputButton.Left && selectImage.enabled == true)
@@ -76,6 +83,7 @@ public class WeaponSlot : Slot
 				weaponManager.SelectImageOff();
 				WeaponManager.Instance.WeaponSlotInfoSend();
 				WeaponManager.Instance.AnimStateChange();
+				WeaponManager.Instance.SwitchEquip();
 				inventory.OnUpdateInven();
 			}
 		}

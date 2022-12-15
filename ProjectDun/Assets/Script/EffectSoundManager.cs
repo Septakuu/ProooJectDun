@@ -11,6 +11,8 @@ public class EffectSoundManager : MonoBehaviour
     [SerializeField] AudioClip skeletonDeath;
     [SerializeField] AudioClip swingWeapon;
     [SerializeField] AudioClip correctSound;
+    [SerializeField] AudioClip incorrectSound;
+
 	private void Awake()
 	{
         Instance = this;
@@ -20,16 +22,20 @@ public class EffectSoundManager : MonoBehaviour
 	{
         sfxAudio.PlayOneShot(levelUp);
 	}
-    public void SkeletonDeath()
+        public void SkeletonDeath()
 	{
         sfxAudio.PlayOneShot(skeletonDeath);
 	}
-    public void SwingWeapon()
+        public void SwingWeapon()
 	{
         sfxAudio.PlayOneShot(swingWeapon);
 	}
-    public void CorrectInteract()
+         public void CorrectInteract()
 	{
         sfxAudio.PlayOneShot(correctSound);
 	}
+        public void IncorrectSound()
+        {
+                sfxAudio.PlayOneShot(incorrectSound);
+        }
 }

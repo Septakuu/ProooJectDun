@@ -4,305 +4,404 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-	public static WeaponManager Instance { get; private set; }
+    public static WeaponManager Instance { get; private set; }
 
-	[SerializeField] Animator anim;
-	[SerializeField] PlayerStat playerStat;
-	[SerializeField] Inventory inven;
+    [SerializeField] Animator anim;
+    [SerializeField] PlayerStat playerStat;
+    [SerializeField] Inventory inven;
 
-	[SerializeField] WeaponSlot mainSlot;
-	[SerializeField] WeaponSlot subSlot;
+    [SerializeField] WeaponSlot mainSlot;
+    [SerializeField] WeaponSlot subSlot;
 
-	[SerializeField] GameObject[] weaponModel;
+    [SerializeField] GameObject[] mainHandWeaponModel;
+    [SerializeField] GameObject[] subHandWeaponModel;
 
-	[SerializeField] ItemWindow itemDescription;
-	[SerializeField] ItemWindow compareItemWindow;
+    [SerializeField] ItemWindow itemDescription;
+    [SerializeField] ItemWindow compareItemWindow;
 
-	public Weapon invenWeapon;
-	public int invenSlotNum;
+    public Weapon invenWeapon;
+    public int invenSlotNum;
 
-	Weapon mainWeapon;
-	Weapon subWeapon;
-	private void Awake()
-	{
-		Instance = this;
-	}
-	private void Start()
-	{
-		SlotSetUp();
-		AnimStateChange();
-	}
+    [SerializeField] Weapon mainWeapon;
+    [SerializeField] Weapon subWeapon;
+    private void Awake()
+    {
+        Instance = this;
+    }
+    private void Start()
+    {
+        SlotSetUp();
+        AnimStateChange();
+    }
 
-	public void AnimStateChange()
-	{
-		if (mainWeapon != null)
-		{
-			anim.SetBool("isUnarmed", false);
-			if (mainWeapon.type == Weapon.TYPE.Bow)
-			{
-				anim.SetBool("isBow", true);
-				anim.SetBool("isOneHand", false);
-				anim.SetBool("isTwoHand", false);
-			}
-			else
-			{
-				switch (mainWeapon.hand)
-				{
-					case Weapon.HAND.OneHand:
-						anim.SetBool("isBow", false);
-						anim.SetBool("isOneHand", true);
-						anim.SetBool("isTwoHand", false);
-						break;
-					case Weapon.HAND.TwoHand:
-						anim.SetBool("isBow", false);
-						anim.SetBool("isOneHand", false);
-						anim.SetBool("isTwoHand", true);
-						break;
-					default:
-						break;
-				}
-			}
-		}
-		else if (mainWeapon == null)
-		{
-			anim.SetBool("isUnarmed", true);
-			anim.SetBool("isBow", false);
-			anim.SetBool("isOneHand", false);
-			anim.SetBool("isTwoHand", false);
+    public void AnimStateChange()
+    {
+        if (mainWeapon != null)
+        {
+            anim.SetBool("isUnarmed", false);
+            if (mainWeapon.type == Weapon.TYPE.Bow)
+            {
+                anim.SetBool("isBow", true);
+                anim.SetBool("isOneHand", false);
+                anim.SetBool("isTwoHand", false);
+            }
+            else
+            {
+                switch (mainWeapon.hand)
+                {
+                    case Weapon.HAND.OneHand:
+                        anim.SetBool("isBow", false);
+                        anim.SetBool("isOneHand", true);
+                        anim.SetBool("isTwoHand", false);
+                        break;
+                    case Weapon.HAND.TwoHand:
+                        anim.SetBool("isBow", false);
+                        anim.SetBool("isOneHand", false);
+                        anim.SetBool("isTwoHand", true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        else if (mainWeapon == null)
+        {
+            anim.SetBool("isUnarmed", true);
+            anim.SetBool("isBow", false);
+            anim.SetBool("isOneHand", false);
+            anim.SetBool("isTwoHand", false);
 
-		}
-	}
+        }
+    }
 
-	public void WeaponSlotInfoSend()
-	{
-		mainWeapon = mainSlot.slotItem as Weapon;
-		subWeapon = subSlot.slotItem as Weapon;
-	}
+    public void WeaponSlotInfoSend()
+    {
+        mainWeapon = mainSlot.slotItem as Weapon;
+        subWeapon = subSlot.slotItem as Weapon;
+    }
+    public void WeaponSlotInfoClear(WeaponSlot slot)
+    {
+        if (slot.mainSub == WeaponSlot.MAINSUB.Main)
+        {
+            mainWeapon = null;
+        }
+        if (slot.mainSub == WeaponSlot.MAINSUB.Sub)
+        {
+            subWeapon = null;
+        }
+    }
 
-	public void SlotSetUp()
-	{
-		mainSlot.weaponManager = this;
-		mainSlot.stat = playerStat;
-		mainSlot.inventory = inven;
-		mainSlot.itemDescription = itemDescription;
-		mainSlot.compareItemWindow = compareItemWindow;
+    public void SlotSetUp()
+    {
+        mainSlot.weaponManager = this;
+        mainSlot.stat = playerStat;
+        mainSlot.inventory = inven;
+        mainSlot.itemDescription = itemDescription;
+        mainSlot.compareItemWindow = compareItemWindow;
 
-		subSlot.weaponManager = this;
-		subSlot.stat = playerStat;
-		subSlot.inventory = inven;
-		subSlot.itemDescription = itemDescription;
-		subSlot.compareItemWindow = compareItemWindow;
-		
-	}
-	public void WeaponSetup(Weapon weapon,int slotNum)
-	{
-		invenWeapon = weapon;
-		invenSlotNum = slotNum;
+        subSlot.weaponManager = this;
+        subSlot.stat = playerStat;
+        subSlot.inventory = inven;
+        subSlot.itemDescription = itemDescription;
+        subSlot.compareItemWindow = compareItemWindow;
 
-		SwitchEquip();
-		/* 
+    }
+    public void WeaponSetup(Weapon weapon, int slotNum)
+    {
+        invenWeapon = weapon;
+        invenSlotNum = slotNum;
+
+
+        /* 
 		 
-			1. ½½·ÔÀÌ ¸ðµÎ ºñ¾îÀÖ´Ù¸é, main¿¡ ÀåÂøÇÑ´Ù.
-			2. main ½½·ÔÀÇ ¾ÆÀÌÅÛÀÌ ÇÑ ¼Õ ¹«±âÀÌ°í, ÀåÂøÇÏ·Á´Â ¾ÆÀÌÅÛ ¶ÇÇÑ ÇÑ ¼Õ ¹«±â(¶Ç´Â ¹æÆÐ)¶ó¸é, ÀåÂøÇÏ·Á´Â ¾ÆÀÌÅÛÀº
-				subSlot¿¡ ÀåÂøÇÑ´Ù.
-			3. main ½½·ÔÀÇ ¾ÆÀÌÅÛÀÌ ºñ¾îÀÖ°í ÀåÂøÇÏ·Á´Â ¹«±â°¡ ¾ç ¼Õ ¹«±â¶ó¸é, main¿¡ ÀåÂøÇÏ°í, subSlotÀÇ slotImage´Â µ¿ÀÏÇÑ ¾ÆÀÌÅÛ ½ºÇÁ¶óÀÌÆ®ÀÇ ¾ËÆÄ °ªÀ» ³·Ãç¼­ Àü´ÞÇÑ´Ù.
-				subSlotÀÇ isAvailableÀ» false·Î ÀüÈ¯ÇÑ´Ù.
-			4. main ½½·ÔÀÌ ¾ÆÀÌÅÛÀÌ ¾ç¼Õ¹«±âÀÌ°í, ÀåÂøÇÏ·Á´Â ¹«±â°¡ ÇÑ¼Õ¹«±â¶ó¸é, subSlotÀÇ isAvailableÀ» true·Î ÀüÈ¯ÇÑ´Ù.
-				¾ç¼Õ¹«±âÀÇ ÀåÂøÀ» ÇØÁ¦ÇÏ°í main(¹æÆÐÀÇ °æ¿ì sub)Slot¿¡ ÀåÂøÇÑ´Ù.
+			1. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´Ù¸ï¿½, mainï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+			2. main ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				subSlotï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+			3. main ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â°¡ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, mainï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½, subSlotï¿½ï¿½ slotImageï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ç¼­ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
+				subSlotï¿½ï¿½ isAvailableï¿½ï¿½ falseï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ñ´ï¿½.
+			4. main ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Õ¹ï¿½ï¿½ï¿½ï¿½Ì°ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â°¡ ï¿½Ñ¼Õ¹ï¿½ï¿½ï¿½ï¿½ï¿½, subSlotï¿½ï¿½ isAvailableï¿½ï¿½ trueï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ñ´ï¿½.
+				ï¿½ï¿½Õ¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ main(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ sub)Slotï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 				
 		*/
 
-		// µÎ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§. ´Â ±×³É ¸ÞÀÎ ¼­ºê ½½·Ô ´Ù »©¼­ ÀÎº¥¿¡ ³Ö¾îÁÖ¸é µÇ´Â°Å ¾Æ´Ñ°¡..?
+        // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½. ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö¸ï¿½ ï¿½Ç´Â°ï¿½ ï¿½Æ´Ñ°ï¿½..?
 
-		// ½½·ÔÀÌ ¸ðµÎ ºñ¾úÀ» ¶§. ( µÎ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§ )
-		if (mainSlot.slotItem == null && subSlot.slotItem == null)
-		{
-			// ¹æÆÐ ÀåÂø
-			if (invenWeapon.type == Weapon.TYPE.Shield)
-			{
-				subSlot.Equip(invenWeapon);
-				inven.inven.Remove(invenWeapon);
-			}
-			// µÎ ¼Õ ¹«±â ÀåÂø
-			else if (invenWeapon.hand == Weapon.HAND.TwoHand)
-			{
-				mainSlot.Equip(invenWeapon);
-				inven.inven.Remove(invenWeapon);
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½. ( ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ )
+        if (mainSlot.slotItem == null && subSlot.slotItem == null)
+        {
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            if (invenWeapon.type == Weapon.TYPE.Shield)
+            {
+                subSlot.Equip(invenWeapon);
+                inven.inven.Remove(invenWeapon);
+            }
+            // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            else if (invenWeapon.hand == Weapon.HAND.TwoHand)
+            {
+                mainSlot.Equip(invenWeapon);
+                inven.inven.Remove(invenWeapon);
 
-				// ¼­ºê½½·Ô Á¶Á¤.
-				TwoHandEquip(invenWeapon);
-			}
-			// ÇÑ ¼Õ ¹«±â ÀåÂø
-			else
-			{
-				mainSlot.Equip(invenWeapon);
-				inven.inven.Remove(invenWeapon);
-			}
-			WeaponSlotInfoSend();
-			AnimStateChange();
-			return;
-		}
+                // ï¿½ï¿½ï¿½ê½½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+                TwoHandEquip(invenWeapon);
+            }
+            // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            else
+            {
+                mainSlot.Equip(invenWeapon);
+                inven.inven.Remove(invenWeapon);
+            }
+            WeaponSlotInfoSend();
+            AnimStateChange();
+            SwitchEquip();
+            invenWeapon=null;
 
-		// main ½½·Ô¿¡ ÇÑ ¼Õ¹«±â¸¦ ÀåÂøÇß°í, ÇÑ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§.(sub½½·Ô¿¡ ¾ÆÀÌÅÛÀÌ ¾øÀ» ¶§.)
-		if (mainWeapon.hand == Weapon.HAND.OneHand && invenWeapon.hand == Weapon.HAND.OneHand && subWeapon == null)
-		{
-			subSlot.Equip(invenWeapon);
-			inven.inven.Remove(invenWeapon);
-			WeaponSlotInfoSend();
-			AnimStateChange();
-			return;
+            return;
+        }
+        if (mainSlot.slotItem == null && subSlot.slotItem != null && invenWeapon.hand == Weapon.HAND.OneHand)
+        {
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            if (invenWeapon.type == Weapon.TYPE.Shield && subWeapon.type == Weapon.TYPE.Shield)
+            {
+                inven.inven[slotNum] = Swap(invenWeapon, subSlot);
+                inven.inven.Remove(invenWeapon);
+            }
+            // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            else if (invenWeapon.hand == Weapon.HAND.TwoHand)
+            {
+                mainSlot.Equip(invenWeapon);
+                inven.inven.Remove(invenWeapon);
 
-		}
+                // ï¿½ï¿½ï¿½ê½½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+                TwoHandEquip(invenWeapon);
+            }
+            // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            else
+            {
+                mainSlot.Equip(invenWeapon);
+                inven.inven.Remove(invenWeapon);
+            }
+            WeaponSlotInfoSend();
+            AnimStateChange();
+            SwitchEquip();
+            invenWeapon = null;
+            return;
+        }
+        // main ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ ï¿½Õ¹ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½.(subï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.)
+        if (mainWeapon!=null&&mainWeapon.hand == Weapon.HAND.OneHand && invenWeapon.hand == Weapon.HAND.OneHand && subWeapon == null)
+        {
+            subSlot.Equip(invenWeapon);
+            inven.inven.Remove(invenWeapon);
+            WeaponSlotInfoSend();
+            AnimStateChange();
+            SwitchEquip();
+            invenWeapon = null;
 
-		// main ½½·Ô¿¡ ÇÑ ¼Õ¹«±â¸¦ ÀåÂøÇß°í, µÎ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§.(sub ½½·Ô Ã¼Å© Æ÷ÇÔ)
-		if (mainWeapon.hand == Weapon.HAND.OneHand && invenWeapon.hand == Weapon.HAND.TwoHand)
-		{
-			// sub ½½·Ô Ã¼Å©
-			if (subWeapon != null)
-			{
-				inven.Add(subWeapon);
-				subSlot.EquipClear(subWeapon);
-			}
+            return;
 
-			inven.inven[slotNum]=Swap(invenWeapon, mainSlot);
-			TwoHandEquip(invenWeapon);
-			WeaponSlotInfoSend();
-			AnimStateChange();
-			return;
-		}
+        }
 
-		// main ½½·Ô¿¡ µÎ ¼Õ¹«±â¸¦ ÀåÂøÇß°í, ÇÑ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§. ( ÀåÂøÇÏ·Á´Â ¾ÆÀÌÅÛÀÌ ¹æÆÐ¶ó¸é sub )
-		if (mainWeapon.hand == Weapon.HAND.TwoHand && invenWeapon.hand == Weapon.HAND.OneHand)
-		{
-				TwoHandClear();     // ¼­ºê½½·Ô Á¤»óÈ­
-			if (invenWeapon.type == Weapon.TYPE.Shield)
-			{
-				inven.Add(mainWeapon);
-				mainSlot.EquipClear(mainWeapon);
-				subSlot.Equip(invenWeapon);
-			}
-			else
-				inven.inven[slotNum] = Swap(invenWeapon, mainSlot); // ÀåÂø¾ÆÀÌÅÛ ±³Ã¼
+        // main ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ ï¿½Õ¹ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½.(sub ï¿½ï¿½ï¿½ï¿½ Ã¼Å© ï¿½ï¿½ï¿½ï¿½)
+        if (mainWeapon!=null&&mainWeapon.hand == Weapon.HAND.OneHand && invenWeapon.hand == Weapon.HAND.TwoHand)
+        {
+            // sub ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
+            if (subWeapon != null)
+            {
+                inven.Add(subWeapon);
+                subSlot.EquipClear(subWeapon);
+            }
 
-			WeaponSlotInfoSend();
-			AnimStateChange();
-			return;
-		}
+            inven.inven[slotNum] = Swap(invenWeapon, mainSlot);
+            TwoHandEquip(invenWeapon);
+            WeaponSlotInfoSend();
+            AnimStateChange();
+            SwitchEquip();
+            invenWeapon = null;
 
-		// main ½½·Ô¿¡ µÎ ¼Õ ¹«±â¸¦ ÀåÂøÇß°í, µÎ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ‹š.
-		if (mainWeapon.hand == Weapon.HAND.TwoHand && invenWeapon.hand == Weapon.HAND.TwoHand)
-		{
-			inven.inven[slotNum] = Swap(invenWeapon, mainSlot);
-			TwoHandEquip(invenWeapon);
-			WeaponSlotInfoSend();
-			AnimStateChange();
-			return;
-		}
+            return;
+        }
 
-		// sub ½½·Ô¿¡ ¹æÆÐ¸¦ ÀåÂøÇß°í, ÇÑ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§.
-		if (subWeapon.type == Weapon.TYPE.Shield && invenWeapon.hand == Weapon.HAND.OneHand)
-		{
-			// ¹æÆÐ¸¦ ³¢·Á°í ÇÒ ¶§.
-			if (invenWeapon.type == Weapon.TYPE.Shield)
-			{
-				inven.inven[slotNum] = Swap(invenWeapon, subSlot);
-				WeaponSlotInfoSend();
-				AnimStateChange();
-				return;
-			}
+        // main ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ ï¿½Õ¹ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½. ( ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ sub )
+        if (mainWeapon!=null&&mainWeapon.hand == Weapon.HAND.TwoHand && invenWeapon.hand == Weapon.HAND.OneHand)
+        {
+            TwoHandClear();     // ï¿½ï¿½ï¿½ê½½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­
+            if (invenWeapon.type == Weapon.TYPE.Shield)
+            {
+                inven.Add(mainWeapon);
+                mainSlot.EquipClear(mainWeapon);
+                subSlot.Equip(invenWeapon);
+            }
+            else
+                inven.inven[slotNum] = Swap(invenWeapon, mainSlot); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
 
-			// ÇÑ ¼Õ ¹«±â¸¦ ÀåÂøÇÒ ¶§
-			if (mainWeapon != null)		// ¸ÞÀÎ ½½·Ô¿¡ ÀåÂøÇÑ Àåºñ°¡ ÀÖÀ» ¶§
-			{
-				inven.inven[slotNum] = Swap(invenWeapon, mainSlot);
-				WeaponSlotInfoSend();
-				AnimStateChange();
-				return;
-			}
-			else    //¸ÞÀÎ ½½·Ô¿¡ ÀåÂøÇÑ Àåºñ°¡ ¾øÀ» ¶§
-			{
-				mainSlot.Equip(invenWeapon);
-				WeaponSlotInfoSend();
-				AnimStateChange();
-				return;
-			}
-		}
+            WeaponSlotInfoSend();
+            AnimStateChange();
+            SwitchEquip();
+            invenWeapon = null;
 
-		// sub ½½·Ô¿¡ ¹æÆÐ¸¦ ÀåÂøÇß°í, µÎ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§.
-		if (mainWeapon==null&&subWeapon!=null && invenWeapon.hand == Weapon.HAND.TwoHand)
-		{
-			inven.Add(subWeapon);
-			subSlot.EquipClear(subWeapon);
-			mainSlot.Equip(invenWeapon);
-			TwoHandEquip(invenWeapon);
+            return;
+        }
 
-			WeaponSlotInfoSend();
-			AnimStateChange();
-			return;
-		}
+        // main ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½.
+        if (mainWeapon!=null&&mainWeapon.hand == Weapon.HAND.TwoHand && invenWeapon.hand == Weapon.HAND.TwoHand)
+        {
+            inven.inven[slotNum] = Swap(invenWeapon, mainSlot);
+            TwoHandEquip(invenWeapon);
+            WeaponSlotInfoSend();
+            AnimStateChange();
+            SwitchEquip();
+            invenWeapon = null;
 
-		//  main sub ½½·Ô¿¡ ÇÑ ¼Õ ¹«±â¸¦ ÀåÂøÇß°í, ÇÑ ¼Õ ¹«±â¸¦ ÀåÂøÇÏ·Á ÇÒ ¶§
-		if(mainWeapon!=null&&subWeapon!=null&& invenWeapon.hand == Weapon.HAND.OneHand)
-		{
-			// µÑ ´Ù ÀåÂøÇÑ »óÅÂ¿¡¼­ ÇÑ ¼Õ ¹«±â Å¬¸¯ ½Ã Àåºñ ½½·Ô Å×µÎ¸®¿¡ Ç¥½Ã << ÀÌ »óÅÂ¿¡¼­ ÇØ´ç ½½·Ô ¿ÞÂÊ Å¬¸¯ ½Ã 
-			// ÇØ´ç À§Ä¡¿¡ Àåºñ ÀåÂø.
-			mainSlot.selectImage.enabled = true;
-			subSlot.selectImage.enabled = true;
+            return;
+        }
 
-		}
-		// 1. I¸¦ ´©¸£¸é º¸°üÇÔ°ú ÀåºñÃ¢ÀÌ ÇÔ²² ¶°¼­ Å¬¸¯ ÀÌº¥Æ®·Î ¿¬µ¿½ÃÅ²´Ù. << ÀÌ°É·Î °¡ÀÚ
-		// 2. µå·¡±× ¾Ø µå·ÓÀ¸·Î ¿øÇÏ´Â ½½·Ô¿¡ ÀåÂø½ÃÅ²´Ù.
-		
-	}
+        // sub ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½Ð¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½.
+        if (subWeapon.type == Weapon.TYPE.Shield && invenWeapon.hand == Weapon.HAND.OneHand)
+        {
+            // ï¿½ï¿½ï¿½Ð¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½.
+            if (invenWeapon.type == Weapon.TYPE.Shield)
+            {
+                inven.inven[slotNum] = Swap(invenWeapon, subSlot);
+                WeaponSlotInfoSend();
+                AnimStateChange();
+                SwitchEquip();
+                invenWeapon = null;
 
-	// ¾ç ¼Õ ¹«±â ÀåÂø. ¼­ºê½½·Ô Àá±Ý
-	private void TwoHandEquip(Weapon weapon)
-	{
-		subSlot.isAvailable = false;
-		subSlot.slotImage.sprite = weapon.itemSprite;
-		Color newColor = subSlot.slotImage.color;
-		newColor.a = 0.4f;
-		subSlot.slotImage.color = newColor;
-	}
+                return;
+            }
 
-	// ¾ç ¼Õ ¹«±â ÀåÂø ÇØÁ¦. ¼­ºê½½·Ô Á¤»óÈ­
-	private void TwoHandClear()
-	{
-		subSlot.isAvailable = true;
-		subSlot.slotImage.sprite = null;
-		Color newColor = subSlot.slotImage.color;
-		newColor.a = 1;
-		subSlot.slotImage.color = newColor;
-	}
+            // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+            if (mainWeapon != null)     // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+            {
+                inven.inven[slotNum] = Swap(invenWeapon, mainSlot);
+                WeaponSlotInfoSend();
+                AnimStateChange();
+                SwitchEquip();
+                invenWeapon = null;
 
-	// ¾ÆÀÌÅÛ ÀåÂø ½Ã ¾ÆÀÌÅÛ ¸ðµ¨¸µ On Off
-	public void SwitchEquip()
-	{
-		if (mainSlot.slotItem != null)
-			SetWeaponActive(mainSlot);
+                return;
+            }
+            else    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+            {
+                mainSlot.Equip(invenWeapon);
+                WeaponSlotInfoSend();
+                AnimStateChange();
+                SwitchEquip();
+                invenWeapon = null;
+                return;
+            }
+        }
 
-		else if (subSlot.slotItem != null)
-			SetWeaponActive(subSlot);
-	}
-	private void SetWeaponActive(WeaponSlot slot)
-	{
+        // sub ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½Ð¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½.
+        if (mainWeapon == null && subWeapon != null && invenWeapon.hand == Weapon.HAND.TwoHand)
+        {
+            inven.Add(subWeapon);
+            subSlot.EquipClear(subWeapon);
+            mainSlot.Equip(invenWeapon);
+            TwoHandEquip(invenWeapon);
+            inven.inven.Remove(invenWeapon);
 
-	}
+            WeaponSlotInfoSend();
+            AnimStateChange();
+            SwitchEquip();
+            invenWeapon = null;
+            return;
+        }
 
-	public void SelectImageOff()
-	{
-		mainSlot.selectImage.enabled = false;
-		subSlot.selectImage.enabled = false;
-	}
+        //  main sub ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½, ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½
+        if (mainWeapon != null && subWeapon != null && invenWeapon.hand == Weapon.HAND.OneHand)
+        {
+            // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×µÎ¸ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ << ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ 
+            // ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+            mainSlot.selectImage.enabled = true;
+            subSlot.selectImage.enabled = true;
 
-	// Àåºñ ½º¿Ò
-	public Weapon Swap(Weapon equipment, WeaponSlot e)
-	{
-		Weapon temp = null;
+        }
+        // 1. Iï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô°ï¿½ ï¿½ï¿½ï¿½Ã¢ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½. << ï¿½Ì°É·ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // 2. ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½.
 
-		temp = (Weapon)e.slotItem;
-		e.Equip(equipment);
+    }
 
-		return temp;
-	}
+    // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ê½½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    private void TwoHandEquip(Weapon weapon)
+    {
+        subSlot.isAvailable = false;
+        subSlot.slotImage.sprite = weapon.itemSprite;
+        Color newColor = subSlot.slotImage.color;
+        newColor.a = 0.4f;
+        subSlot.slotImage.color = newColor;
+    }
+
+    // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ê½½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­
+    public void TwoHandClear()
+    {
+        subSlot.isAvailable = true;
+        subSlot.slotImage.sprite = null;
+        Color newColor = subSlot.slotImage.color;
+        newColor.a = 1;
+        subSlot.slotImage.color = newColor;
+    }
+
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ðµ¨¸ï¿½ On Off
+    public void SwitchEquip()
+    {
+        SetWeaponActive(mainSlot);
+        SetWeaponActive(subSlot);
+    }
+
+    private void SetWeaponActive(WeaponSlot slot)
+    {
+        if (slot.slotItem != null)
+        {
+            if (slot.mainSub == WeaponSlot.MAINSUB.Main)
+            {
+                foreach (GameObject a in mainHandWeaponModel)
+                {
+                    if (a.name == slot.slotItem.itemCode)
+                        a.SetActive(true);
+                    else
+                        a.SetActive(false);
+                }
+            }
+            else if (slot.mainSub == WeaponSlot.MAINSUB.Sub)
+            {
+                foreach (GameObject a in subHandWeaponModel)
+                {
+                    if (a.name == slot.slotItem.itemCode)
+                        a.SetActive(true);
+                    else
+                        a.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            if (slot.mainSub == WeaponSlot.MAINSUB.Main)
+                foreach (GameObject a in mainHandWeaponModel)
+                {
+                    a.SetActive(false);
+                }
+            if (slot.mainSub == WeaponSlot.MAINSUB.Sub)
+                foreach (GameObject a in subHandWeaponModel)
+                {
+                    a.SetActive(false);
+                }
+        }
+    }
+
+    public void SelectImageOff()
+    {
+        mainSlot.selectImage.enabled = false;
+        subSlot.selectImage.enabled = false;
+    }
+
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public Weapon Swap(Weapon equipment, WeaponSlot e)
+    {
+        Weapon temp = null;
+
+        temp = (Weapon)e.slotItem;
+        e.Equip(equipment);
+
+        return temp;
+    }
 }

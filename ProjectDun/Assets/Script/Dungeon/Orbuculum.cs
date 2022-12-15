@@ -16,12 +16,12 @@ public class Orbuculum : MonoBehaviour
 	{
 		if (isUse)
 		{
-			// ÀÌ¹Ì »ç¿ë ÇÑ ¿ÀºêÁ§Æ®ÀÔ´Ï´Ù.
+			// ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ô´Ï´ï¿½.
 			return;
 		}
 		if (orbManager.isClear)
 		{
-			// ÀÌ¹Ì Å¬¸®¾î µÈ ¹æÀÔ´Ï´Ù.
+			// ï¿½Ì¹ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 			return;
 		}
 
@@ -35,6 +35,7 @@ public class Orbuculum : MonoBehaviour
 		else
 		{
 			spawnManager.Spawn();
+			EffectSoundManager.Instance.IncorrectSound();
 			doorManager.OnSwitchDoor(isAnswer);
 
 			isUse = true;
@@ -58,7 +59,7 @@ public class Orbuculum : MonoBehaviour
 		bool exsist = CheckPlayer();
 		if (exsist && Input.GetKeyDown(KeyCode.G))
 		{
-			Debug.Log("ÀÛµ¿!");
+			Debug.Log("ï¿½Ûµï¿½!");
 			Debug.Log(isAnswer);
 			OnInteract();
 		}

@@ -93,6 +93,7 @@ public class Inventory : MonoBehaviour
 		else if(inven[slotNum] is Weapon)
 		{
 			Weapon item = inven[slotNum] as Weapon;
+			
 			weaponManager.WeaponSetup(item,slotNum);
 			itemDescription.SwitchPanel(false);
 		}
