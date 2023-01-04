@@ -4,81 +4,77 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-	public static ItemManager Instance { get; private set; }
-	[SerializeField] DropUIManager dropUIManager;
-	// ÇÃ·¹ÀÌ¾î ÀÎÆ÷ °ªÀ».. inven?
-	[SerializeField] PlayerMovement player;
-	[SerializeField] Inventory inven;
-	[SerializeField] Item[] dropItems;
-	[SerializeField] DropItem dropitem;
-	private void Awake()
-	{
-		Instance = this;
-	}
-	// ¸ó½ºÅÍÀÇ Death Å¸ÀÌ¹Ö¿¡ ÇØ´çÇÔ¼ö È£Ãâ
-	public void DropItem(EnemyController enemy)
-	{
-		Debug.Log("ItemDrop ·ÎÁ÷ ½ÇÇà");
-		dropItems = enemy.enemyInfo.dropItem;
-		int num = Random.Range(1, 100);
-		if (num < 20)
-		{
-			// °ñµå µå¶ø? ( ¾È ³ª¿Ã ¼öµµ ÀÖÀÝ¾Æ.)
-			// ¾ÆÀÌÅÛ µå¶ø x 
-			Debug.Log("¾ÆÀÌÅÛ ¹Ì µå¶ø");
-		}
-		else if (num >= 20)
-		{
-			// °ñµå µå¶ø
-			// ¾ÆÀÌÅÛ µå¶ø
-			inven.gold+=DecideGold(enemy);
+    public static ItemManager Instance { get; private set; }
+    [SerializeField] DropUIManager dropUIManager;
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.. inven?
+    [SerializeField] PlayerMovement player;
+    [SerializeField] Inventory inven;
+    [SerializeField] Item[] dropItems;
+    [SerializeField] DropItem dropitem;
+    private void Awake()
+    {
+        Instance = this;
+    }
 
-			Vector3 enemyPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y+3f, enemy.transform.position.z);
+    public void DropItem(EnemyController enemy)
+    {
 
-			DropItem newDropItem = Instantiate(dropitem, enemyPos, enemy.transform.rotation);
-			newDropItem.player = player;
-			newDropItem.SetUp(DecideItem(dropItems));
-			
-		}
-	}
-	public Item DecideItem(Item[] items)
-	{
-		int num = Random.Range(1, 100);
-		Item newItem = null;
-		try
-		{
-			if (num <= 20)
-			{
-				newItem= items[0];
-			}
-			if (20 < num && num <= 40)
-			{
-				newItem= items[1];
-			}
-			if (40 < num && num <= 60)
-			{
-				newItem= items[2];
-			}
-			if (60 < num && num <= 80)
-			{
-				newItem= items[3];
-			}
-			if (80 < num && num <= 100)
-			{
-				newItem= items[4];
-			}
-		}
-		catch
-		{
-			Debug.Log("ÀÎµ¦½º¹üÀ§ Å»Ãâ");
-			return null;
-		}
-		return newItem;
-	}
-	public int DecideGold(EnemyController enemy)
-	{
-		int gold = Mathf.RoundToInt((float)(enemy.enemyInfo.level * 1.5));
-		Debug.Log($"°ñµå¸¦ È¹µæÇß½À´Ï´Ù. {gold} °ñµå");
-		return gold;
-	}
+        dropItems = enemy.enemyInfo.dropItem;
+        int num = Random.Range(1, 100);
+        if (num < 20)
+        {
+            Debug.Log("ì•„ì´í…œë¯¸ë“œëž");
+        }
+        else if (num >= 20)
+        {
+
+            inven.gold += DecideGold(enemy);
+
+            Vector3 enemyPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 3f, enemy.transform.position.z);
+
+            DropItem newDropItem = Instantiate(dropitem, enemyPos, enemy.transform.rotation);
+            newDropItem.player = player;
+            newDropItem.SetUp(DecideItem(dropItems));
+        }
+    }
+    public Item DecideItem(Item[] items)
+    {
+        int num = Random.Range(1, 100);
+        Item newItem = null;
+        try
+        {
+            if (num <= 20)
+            {
+                newItem = items[0];
+            }
+            if (20 < num && num <= 40)
+            {
+                newItem = items[1];
+            }
+            if (40 < num && num <= 60)
+            {
+                newItem = items[2];
+            }
+            if (60 < num && num <= 80)
+            {
+                newItem = items[3];
+            }
+            if (80 < num && num <= 100)
+            {
+                newItem = items[4];
+            }
+        }
+        catch
+        {
+
+            return null;
+        }
+        return newItem;
+    }
+    public int DecideGold(EnemyController enemy)
+    {
+        int gold = Mathf.RoundToInt((float)(enemy.enemyInfo.level * 1.5));
+
+        return gold;
+    }
 }
