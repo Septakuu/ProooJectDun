@@ -88,28 +88,21 @@ public class PlayerMovement : MonoBehaviour
                     target = hit.collider.GetComponent<Damagable>();
                     if (hit.collider.gameObject.CompareTag("Ground"))
                         state = STATE.Move;
-                    
-                    if (target != null)              // target 이  null이 아니고,
-                    {
+                    else if (target != null)
                         state = STATE.Chase;
-                        // attackRange안의 적의 collider[]을 받아와서,
-                        // target의 instanceid와 대조시켜 올바른 대상을 공격
-                        // 또는 target과 나 사이의 distance가 attackrange보다 작거나 같다면!
-
-                    }
                 }
             }
         }
     }
 
     private void Idle()
-	{
+    {
         anim.SetBool("isMove", false);
         TargetUI.Instance.UpdateTargetUI(target);
     }
 
     private void Chase()
-	{
+    {
         if (target == null)
             return;
 
@@ -136,13 +129,13 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Attack()
-	{
+    {
         if (target == null)
-		{
+        {
             anim.SetBool("isAttack", false);
             state = STATE.Idle;
             return;
-		}
+        }
         agent.SetDestination(transform.position);
         transform.LookAt(target.transform);
         if (attackCoroutine != null)
@@ -152,16 +145,16 @@ public class PlayerMovement : MonoBehaviour
     }
 
     IEnumerator AttackCycle()
-	{
+    {
         WaitForSeconds wait = new WaitForSeconds(stat.basic.attackRate);
-		while (state == STATE.Attack)
-		{
+        while (state == STATE.Attack)
+        {
             anim.SetBool("isMove", false);
-            anim.SetBool("isAttack",true);
-            
+            anim.SetBool("isAttack", true);
+
             TargetUI.Instance.UpdateTargetUI(target);
             yield return wait;
-		}
+        }
         StopCoroutine(attackCoroutine);
         anim.SetBool("isAttack", false);
 
@@ -178,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-	
+
 #endif
 }
 

@@ -13,29 +13,29 @@ public class EffectSoundManager : MonoBehaviour
     [SerializeField] AudioClip correctSound;
     [SerializeField] AudioClip incorrectSound;
 
-	private void Awake()
-	{
+    private void Awake()
+    {
         Instance = this;
-	}
+    }
 
-	public void PlayLevelUp()
-	{
+    public void PlayLevelUp()
+    {
         sfxAudio.PlayOneShot(levelUp);
-	}
-        public void SkeletonDeath()
-	{
+    }
+    public void SkeletonDeath()
+    {
         sfxAudio.PlayOneShot(skeletonDeath);
-	}
-        public void SwingWeapon()
-	{
+    }
+    public void SwingWeapon()
+    {
         sfxAudio.PlayOneShot(swingWeapon);
-	}
-         public void CorrectInteract()
-	{
+    }
+    public void CorrectInteract()
+    {
         sfxAudio.PlayOneShot(correctSound);
-	}
-        public void IncorrectSound()
-        {
-                sfxAudio.PlayOneShot(incorrectSound);
-        }
+    }
+    public void IncorrectSound()
+    {
+        sfxAudio.PlayOneShot(incorrectSound);
+    }
 }
